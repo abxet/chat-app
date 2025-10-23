@@ -33,30 +33,32 @@ const Signup = () => {
         return "Strong";
     };
 
-    useEffect(() => {
-        if (password && confirmPassword && password !== confirmPassword) {
-            setError("Passwords do not match");
-        } else if (
-            password &&
-            (password.length < 8 ||
-                !/[A-Z]/.test(password) ||
-                !/[a-z]/.test(password) ||
-                !/[0-9]/.test(password) ||
-                !/\W/.test(password))
-        ) {
-            setError(
-                "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
-            );
-        } else {
-            setError("");
-        }
-        setContainsCapitalLetters(/[A-Z]/.test(password));
-        setContainsLowercaseLetters(/[a-z]/.test(password));
-        setContainsNumbers(/[0-9]/.test(password));
-        setContainsSpecialCharacters(/[\W]/.test(password));
-        setMoreThan8Characters(password.length >= 8);
-        setPasswordStrength(calculatePasswordStrength(password));
-    }, [password, confirmPassword]);
+    // Turning off password validation for development purposes
+
+    // useEffect(() => {
+    //     if (password && confirmPassword && password !== confirmPassword) {
+    //         setError("Passwords do not match");
+    //     } else if (
+    //         password &&
+    //         (password.length < 8 ||
+    //             !/[A-Z]/.test(password) ||
+    //             !/[a-z]/.test(password) ||
+    //             !/[0-9]/.test(password) ||
+    //             !/\W/.test(password))
+    //     ) {
+    //         setError(
+    //             "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
+    //         );
+    //     } else {
+    //         setError("");
+    //     }
+    //     setContainsCapitalLetters(/[A-Z]/.test(password));
+    //     setContainsLowercaseLetters(/[a-z]/.test(password));
+    //     setContainsNumbers(/[0-9]/.test(password));
+    //     setContainsSpecialCharacters(/[\W]/.test(password));
+    //     setMoreThan8Characters(password.length >= 8);
+    //     setPasswordStrength(calculatePasswordStrength(password));
+    // }, [password, confirmPassword]);
 
     const handleSignup = async (e) => {
         e.preventDefault();

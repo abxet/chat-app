@@ -10,7 +10,7 @@ const LeftBar = ({ setActiveSection, activeSection }) => {
   ];
 
   return (
-    <div className="w-16 bg-gray-900 flex flex-col justify-between shadow-md">
+    <div className="w-16 bg-black flex flex-col justify-between shadow-md">
       <div className="flex-1"></div>
 
       <div className="flex flex-col space-y-4 mb-4 items-center">

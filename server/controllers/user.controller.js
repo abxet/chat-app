@@ -38,9 +38,11 @@ const signup = async (req, res) => {
     });
 
     // Generate JWT token
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
+const token = jwt.sign(
+  { _id: newUser._id, username: newUser.username, email: newUser.email },
+  process.env.JWT_SECRET,
+  { expiresIn: '1h' }
+);
 
     // Send response with token
     res.status(201).json({ message: 'User created successfully', token });
@@ -80,9 +82,11 @@ const login = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
+const token = jwt.sign(
+  { _id: user._id, username: user.username, email: user.email },
+  process.env.JWT_SECRET,
+  { expiresIn: '1h' }
+);
 
     // Send response with token
     res.status(200).json({
@@ -96,6 +100,20 @@ const login = async (req, res) => {
     res.status(500).json({ error: '💔 Server error' });
   }
 };
+
+// GET /api/users/me
+export const getCurrentUser = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+
+  res.json({
+    _id: req.user._id,
+    username: req.user.username,
+    email: req.user.email, // optional
+  });
+};
+
 
 // export the functions
 export { signup, login };

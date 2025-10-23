@@ -8,7 +8,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
         placeholder="Search contacts..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full pl-10 pr-3 py-2 rounded-lg bg-gray-900 text-white placeholder-gray-400 border-b-2 border-teal-600 focus:outline-none focus:border-teal-400"
+        className="w-full pl-10 pr-3 py-2 bg-gray-900 text-white placeholder-gray-400 border-b-2 border-teal-600 focus:outline-none focus:border-teal-400"
       />
       <Search
         size={18}

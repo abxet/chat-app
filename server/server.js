@@ -5,6 +5,7 @@ import router from './routes/user.routes.js';
 import http from 'http';
 import { initSocket } from './socket/socket.server.js';
 import connectDB from './config/db.js';
+import friendsRoutes from './routes/friend.route.js';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(cors({
 
 // API routes
 app.use('/api', router);
+app.use('/api/friends', friendsRoutes);
 
 // Create HTTP server
 const server = http.createServer(app);
