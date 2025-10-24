@@ -1,39 +1,5 @@
 
-
-// import React from "react";
-
-// const FriendRequestList = ({ requests, onAccept }) => {
-//   return (
-//     <div className="space-y-3">
-//       <p className="text-gray-400 font-semibold mb-2">Friend Requests</p>
-
-//       {requests.length ? (
-//         requests.map((request) => (
-//           <div
-//             key={request._id}
-//             className="flex items-center justify-between p-2 rounded hover:bg-gray-700 text-white"
-//           >
-//             <div className="flex flex-col">
-//               <span className="font-medium">{request.username}</span>
-//               <span className="text-gray-400 text-sm">{request.email}</span>
-//             </div>
-//             <button
-//               onClick={() => onAccept(request)} // pass the full request object
-//               className="bg-teal-500 hover:bg-teal-600 px-2 py-1 rounded text-white text-sm"
-//             >
-//               Accept
-//             </button>
-//           </div>
-//         ))
-//       ) : (
-//         <p className="text-gray-400 text-sm">No new requests</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default FriendRequestList;
-
+// components/FriendRequestList
 import React from "react";
 import { UserPlus, UserMinus } from 'lucide-react'
 

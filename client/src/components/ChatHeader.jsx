@@ -1,3 +1,4 @@
+// components/ChatHeader
 import React from "react";
 
 const ChatHeader = ({ contactName, onClick }) => {

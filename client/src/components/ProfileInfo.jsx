@@ -1,3 +1,5 @@
+
+// components/ProfileInfo
 import React from "react";
 
 const ProfileInfo = ({ name, bio, onUnfriend, onEditProfile }) => {
@@ -16,14 +18,8 @@ const ProfileInfo = ({ name, bio, onUnfriend, onEditProfile }) => {
       {/* Bio */}
       <p className="text-gray-400 text-center">{bio || "No bio available."}</p>
 
-      {/* Edit & Unfriend Buttons */}
+      {/* Unfriend Buttons */}
       <div className="flex space-x-4">
-        <button
-          onClick={onEditProfile}
-          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white font-semibold"
-        >
-          Edit Profile
-        </button>
         <button
           onClick={() => onUnfriend && onUnfriend(name)}
           className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white font-semibold"

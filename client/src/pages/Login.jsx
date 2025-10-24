@@ -1,19 +1,23 @@
 // Login.jsx
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { KeyRound, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // ✅ Moved inside the component (this fixes the invalid hook call)
+  const { updateUserData } = useContext(UserContext);
+
   const handleLogin = async (e) => {
-    e.preventDefault(); // stop page reload
+    e.preventDefault();
 
     if (!usernameOrEmail.trim() || !password.trim()) {
       toast.error("Please enter both username/email and password.");
@@ -22,11 +26,16 @@ const Login = () => {
 
     try {
       const response = await api.post("/login", { usernameOrEmail, password });
+
       if (response?.data?.token) {
         localStorage.setItem("token", response.data.token);
+         localStorage.setItem("userId", response.data.user._id);
+
+        // Update context
+        updateUserData(response.data.user || { usernameOrEmail });
+
         toast.success("Login successful!");
-        // setTimeout(() => navigate("/chat"), 1000); // redirect after 1 sec
-        navigate("/chat"); // redirect to chat page
+        navigate("/chat");
       } else {
         toast.error("Unexpected server response. Please try again.");
       }
@@ -43,10 +52,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-800 relative">
-      {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} />
-
-      {/* Login Card */}
       <motion.form
         onSubmit={handleLogin}
         initial={{ opacity: 0, y: 40 }}
@@ -63,7 +69,6 @@ const Login = () => {
           Welcome Back!
         </motion.h2>
 
-        {/* Username Input */}
         <div className="relative mb-3">
           <input
             type="text"
@@ -78,7 +83,6 @@ const Login = () => {
           />
         </div>
 
-        {/* Password Input */}
         <div className="relative mb-4">
           <input
             type="password"
@@ -93,7 +97,6 @@ const Login = () => {
           />
         </div>
 
-        {/* Submit Button */}
         <motion.button
           type="submit"
           whileTap={{ scale: 0.95 }}
@@ -105,7 +108,6 @@ const Login = () => {
           Login
         </motion.button>
 
-        {/* Signup Link */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

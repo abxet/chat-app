@@ -1,10 +1,12 @@
 
 
+// components/SideBar
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { LogOut } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 import SearchBar from "./SearchBar";
 import SettingsPanel from "./SettingsPanel";
@@ -103,9 +105,13 @@ const Sidebar = ({ activeSection, onSelectContact }) => {
   };
 
   // ✅ Logout
+ const { updateUserData } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.reload();
+    updateUserData(null);
+    navigate("/login");
   };
 
   // ✅ Filter friends by search term

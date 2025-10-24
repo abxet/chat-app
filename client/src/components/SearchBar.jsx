@@ -1,3 +1,5 @@
+
+// components/SearchRoutes
 import { Search } from "lucide-react";
 
 const SearchBar = ({ searchTerm, setSearchTerm }) => {

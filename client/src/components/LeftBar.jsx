@@ -1,3 +1,5 @@
+
+// components/LeftBar
 import { User, Settings, Bell, UserPlus } from "lucide-react";
 import { motion } from "framer-motion";
 

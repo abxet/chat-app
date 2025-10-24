@@ -1,3 +1,5 @@
+
+// components/SettingsPanel
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { LogOut, Edit } from "lucide-react";

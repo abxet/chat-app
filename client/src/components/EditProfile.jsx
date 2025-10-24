@@ -1,3 +1,5 @@
+
+// components/EditProfile
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
