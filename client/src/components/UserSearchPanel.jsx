@@ -55,7 +55,7 @@ const UserSearchPanel = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           // className="flex-1 bg-gray-800 text-white p-2 rounded"
-          className="w-full pl-3 pr-3 py-2 bg-gray-900 text-white placeholder-gray-400 border-b-2 border-teal-600 focus:outline-none focus:border-teal-400"
+          className="w-full pl-3 pr-3 py-2 dark:bg-gray-900 dark:text-white text-gray-600 placeholder-gray-400 border-b-2 border-teal-600 focus:outline-none focus:border-teal-400"
         />
         <button
           onClick={handleSearch}
@@ -73,7 +73,7 @@ const UserSearchPanel = () => {
           {results.map((user) => (
             <div
               key={user._id}
-              className="flex items-center justify-between bg-gray-800 p-2 rounded"
+              className="flex items-center justify-between bg-white text-gray-600 dark:bg-gray-800 p-2 rounded"
             >
               <div>
                 <p className="font-semibold">{user.username}</p>
@@ -84,7 +84,7 @@ const UserSearchPanel = () => {
                 className="bg-green-600 p-2 rounded hover:bg-green-500"
                 title="Send Friend Request"
               >
-                <UserPlus size={18} />
+                <UserPlus size={18} className="text-white"/>
               </button>
             </div>
           ))}

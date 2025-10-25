@@ -1,12 +1,14 @@
 
 // pages/signUp
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+// import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { CircleX, CircleCheck, Lock, KeyRound, User, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import PasswordStrengthBar from "../components/PasswordStrengthBar"; // adjust path if needed
-
+import ThemeToggle from "../components/ThemeToggle";
+import { UserContext } from "../context/UserContext";
 
 const Signup = () => {
     const [username, setUsername] = useState("");
@@ -20,7 +22,9 @@ const Signup = () => {
     const [containsNumbers, setContainsNumbers] = useState(false);
     const [containsSpecialCharacters, setContainsSpecialCharacters] = useState(false);
     const [moreThan8Characters, setMoreThan8Characters] = useState(false);
+    
     const navigate = useNavigate();
+    const { updateUserData } = useContext(UserContext);
 
     const calculatePasswordStrength = (password) => {
         let strength = 0;
@@ -37,30 +41,30 @@ const Signup = () => {
 
     // Turning off password validation for development purposes
 
-    // useEffect(() => {
-    //     if (password && confirmPassword && password !== confirmPassword) {
-    //         setError("Passwords do not match");
-    //     } else if (
-    //         password &&
-    //         (password.length < 8 ||
-    //             !/[A-Z]/.test(password) ||
-    //             !/[a-z]/.test(password) ||
-    //             !/[0-9]/.test(password) ||
-    //             !/\W/.test(password))
-    //     ) {
-    //         setError(
-    //             "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
-    //         );
-    //     } else {
-    //         setError("");
-    //     }
-    //     setContainsCapitalLetters(/[A-Z]/.test(password));
-    //     setContainsLowercaseLetters(/[a-z]/.test(password));
-    //     setContainsNumbers(/[0-9]/.test(password));
-    //     setContainsSpecialCharacters(/[\W]/.test(password));
-    //     setMoreThan8Characters(password.length >= 8);
-    //     setPasswordStrength(calculatePasswordStrength(password));
-    // }, [password, confirmPassword]);
+    useEffect(() => {
+        if (password && confirmPassword && password !== confirmPassword) {
+            setError("Passwords do not match");
+        } else if (
+            password &&
+            (password.length < 8 ||
+                !/[A-Z]/.test(password) ||
+                !/[a-z]/.test(password) ||
+                !/[0-9]/.test(password) ||
+                !/\W/.test(password))
+        ) {
+            setError(
+                "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
+            );
+        } else {
+            setError("");
+        }
+        setContainsCapitalLetters(/[A-Z]/.test(password));
+        setContainsLowercaseLetters(/[a-z]/.test(password));
+        setContainsNumbers(/[0-9]/.test(password));
+        setContainsSpecialCharacters(/[\W]/.test(password));
+        setMoreThan8Characters(password.length >= 8);
+        setPasswordStrength(calculatePasswordStrength(password));
+    }, [password, confirmPassword]);
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -71,6 +75,11 @@ const Signup = () => {
         try {
             const response = await api.post("/signup", { username, email, password });
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.user._id);
+
+            updateUserData(response.data.user);
+            // toast.success("Sign up successful!");
+            alert("Sign up successful!");
             navigate("/chat");
         } catch (err) {
             console.error(err);
@@ -79,12 +88,12 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-800">
+        <div className="flex justify-center items-center h-screen dark:bg-gray-800">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="flex flex-col w-full max-w-sm p-8 bg-gray-900 rounded-lg shadow-lg"
+                className="flex flex-col w-full max-w-sm p-8 dark:bg-gray-900 rounded-lg shadow-lg"
             >
                 <motion.h2
                     initial={{ opacity: 0, y: -20 }}
@@ -104,7 +113,7 @@ const Signup = () => {
                     <input
                         type="text"
                         placeholder="Username"
-                        className="border-b-2 border-teal-600 bg-transparent text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
@@ -123,7 +132,7 @@ const Signup = () => {
                     <input
                         type="email"
                         placeholder="Email"
-                        className="border-b-2 border-teal-600 bg-transparent text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -142,7 +151,7 @@ const Signup = () => {
                     <input
                         type="password"
                         placeholder="Password"
-                        className="border-b-2 border-teal-600 bg-transparent text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 border-teal-600 bg-transparent  text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -206,7 +215,7 @@ const Signup = () => {
                     <input
                         type="password"
                         placeholder="Confirm Password"
-                        className="border-b-2 border-teal-600 bg-transparent text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
@@ -256,7 +265,9 @@ const Signup = () => {
                         Login
                     </a>
                 </motion.p>
+            
             </motion.div>
+            <ThemeToggle/>
         </div>
     );
 };

@@ -18,7 +18,7 @@ const PasswordStrengthBar = ({ strength }) => {
   const { width, color } = getBarProps();
 
   return (
-    <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden mb-2">
+    <div className="w-full h-2 dark:bg-gray-700 bg-gray-300 rounded-full overflow-hidden mb-2">
       <motion.div
         className="h-full rounded-full"
         initial={{ width: 0 }}

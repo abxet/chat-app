@@ -6,7 +6,7 @@ const ChatHeader = ({ contactName, onClick }) => {
 
   return (
     <div
-      className="flex items-center p-4 bg-gray-900 border-b border-gray-700 cursor-pointer"
+      className="flex items-center p-4 bg-gray-200 dark:bg-gray-900 border-b border-gray-700 cursor-pointer"
       onClick={onClick}
     >
       {/* Profile circle */}
@@ -15,7 +15,7 @@ const ChatHeader = ({ contactName, onClick }) => {
       </div>
 
       {/* Contact name */}
-      <div className="text-white font-semibold">{contactName || "Unknown"}</div>
+      <div className="dark:text-white text-gray-800 font-semibold">{contactName || "Unknown"}</div>
     </div>
   );
 };

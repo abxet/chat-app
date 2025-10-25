@@ -1,22 +1,26 @@
+
 import React, { useState } from "react";
 import LeftBar from "../components/LeftBar";
 import Sidebar from "../components/Sidebar";
 import ChatWindow from "../components/ChatWindow";
+import EditProfile from "../components/EditProfile";
 import { io } from "socket.io-client";
+
 
 const socket = io("http://localhost:5000", {
   transports: ["websocket", "polling"],
-}); // connect once
+});
 
 const Chat = () => {
   const [activeSection, setActiveSection] = useState("contacts");
   const [selectedFriend, setSelectedFriend] = useState(null);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleSelectContact = (friend) => {
     setSelectedFriend(friend);
 
-    // join room: roomId = sorted combination of user ids
-    const currentUserId = localStorage.getItem("userId"); // store userId after login
+    const currentUserId = localStorage.getItem("userId");
     const roomId =
       currentUserId < friend._id
         ? `${currentUserId}_${friend._id}`
@@ -25,11 +29,31 @@ const Chat = () => {
     socket.emit("join_room", roomId);
   };
 
+  // ✅ Handle when Edit Profile is clicked in Settings
+  const handleEditProfile = (user) => {
+    setCurrentUser(user);
+    setEditingProfile(true);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-800">
+    <div className="flex h-screen dark:bg-gray-800 bg-gray-500">
       <LeftBar setActiveSection={setActiveSection} activeSection={activeSection} />
-      <Sidebar activeSection={activeSection} onSelectContact={handleSelectContact} />
-      <ChatWindow socket={socket} selectedFriend={selectedFriend} />
+
+      <Sidebar
+        activeSection={activeSection}
+        onSelectContact={handleSelectContact}
+        onEditProfile={handleEditProfile} // ✅ new prop
+      />
+
+      {/* ✅ Switch between Chat and Edit Profile */}
+      {editingProfile ? (
+        <EditProfile
+          currentUser={currentUser}
+          onClose={() => setEditingProfile(false)}
+        />
+      ) : (
+        <ChatWindow socket={socket} selectedFriend={selectedFriend} />
+      )}
     </div>
   );
 };

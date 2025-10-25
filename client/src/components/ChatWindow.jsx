@@ -3,17 +3,26 @@ import { useState, useEffect, useRef } from "react";
 import { Send } from "lucide-react";
 import ChatHeader from "./ChatHeader";
 import ProfileInfo from "./ProfileInfo";
-import EditProfile from "./EditProfile";
 import api from "../api/axiosInstance.js";
 
 const ChatWindow = ({ socket, selectedFriend }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [showProfile, setShowProfile] = useState(false);
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const scrollRef = useRef();
 
   const currentUserId = localStorage.getItem("userId");
+  // handle unfriend
+  const handleUnfriend = async (friendId) => {
+    try {
+      const res = await api.post(`/friends/unfriend/${friendId}`);
+      alert(res.data.message || "Unfriended successfully!");
+      // Optional: refresh friend list or navigate
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.error || "Unable to unfriend");
+    }
+  };
 
   // ✅ Fetch previous messages when friend changes
   useEffect(() => {
@@ -31,12 +40,12 @@ const ChatWindow = ({ socket, selectedFriend }) => {
     fetchMessages();
   }, [selectedFriend, currentUserId]);
 
-  // ✅ Auto-scroll to bottom when messages change
+  //  Auto-scroll to bottom when messages change
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // ✅ Join private room & listen for real-time messages
+  // Join private room & listen for real-time messages
   useEffect(() => {
     if (!socket || !selectedFriend) return;
 
@@ -64,7 +73,7 @@ const ChatWindow = ({ socket, selectedFriend }) => {
     return () => socket.off("chat message", handleNewMessage);
   }, [socket, selectedFriend, currentUserId]);
 
-  // ✅ Send message
+  //  Send message
   const sendMessage = async () => {
     if (!input.trim() || !selectedFriend) return;
 
@@ -103,41 +112,41 @@ const ChatWindow = ({ socket, selectedFriend }) => {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-800">
+    <div className="flex-1 flex flex-col dark:bg-gray-800 bg-gray-300">
       <ChatHeader
         contactName={selectedFriend.username}
         onClick={() => setShowProfile(!showProfile)}
       />
 
-      {isEditingProfile ? (
-        <EditProfile
-          currentUser={{ username: selectedFriend.username, bio: selectedFriend.bio }}
-          onClose={() => setIsEditingProfile(false)}
-        />
-      ) : showProfile ? (
+      { showProfile ? (
         <ProfileInfo
           name={selectedFriend.username}
-          bio={selectedFriend.bio}
-          onEditProfile={() => setIsEditingProfile(true)}
+          bio={selectedFriend.profile?.bio || "No bio available"}
+          onUnfriend={() => handleUnfriend(selectedFriend._id)}
         />
       ) : (
         <>
           {/* Messages */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3">
-            {messages.map((msg) => (
-              <div
-                key={msg._id || msg.id}
-                className={`max-w-xs px-4 py-2 rounded-lg break-words ${
-                  msg.senderId === currentUserId
-                    ? "bg-teal-500 text-white self-end"
-                    : "bg-gray-700 text-white self-start"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
+
+          <div className="flex-1 p-4 overflow-y-auto flex flex-col space-y-3">
+            {messages.map((msg) => {
+              const isCurrentUser = msg.senderId === currentUserId;
+              return (
+                <div
+                  key={msg._id || msg.id}
+                  className={`max-w-xs px-4 py-2 rounded-lg break-words ${isCurrentUser
+                    ? "bg-teal-500 text-white self-end rounded-br-none" // user's message → bottom-right corner sharp
+                    : "dark:bg-gray-700 bg-white dark:text-white text-gray-600 self-start rounded-bl-none" // friend's message → bottom-left corner sharp
+                    }`}
+                >
+                  <div>{msg.text}</div>
+                </div>
+              );
+            })}
             <div ref={scrollRef} />
           </div>
+
+
 
           {/* Input */}
           <div className="p-4 border-t border-gray-700 flex items-center space-x-2">
@@ -146,7 +155,7 @@ const ChatWindow = ({ socket, selectedFriend }) => {
               placeholder="Type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 px-4 py-2 border-b-2 border-teal-600 bg-gray-900 text-white focus:outline-none focus:border-teal-400 placeholder-gray-400"
+              className="flex-1 px-4 py-2 border-b-2 border-teal-600 dark:bg-gray-900 bg-white rounded-t-sm dark:text-white focus:outline-none focus:border-teal-400 placeholder-gray-400"
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
             <button

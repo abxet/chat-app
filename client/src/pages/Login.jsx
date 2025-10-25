@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../context/UserContext";
+import ThemeToggle from "../components/ThemeToggle";
 
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
@@ -51,14 +52,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-800 relative">
+    <div className="flex justify-center items-center h-screen dark:bg-gray-800 relative">
       <ToastContainer position="top-right" autoClose={3000} />
       <motion.form
         onSubmit={handleLogin}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col w-full max-w-sm p-8 bg-gray-900 rounded-lg shadow-lg"
+        className="flex flex-col w-full max-w-sm p-8 dark:bg-gray-900 rounded-lg shadow-lg"
       >
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
@@ -73,7 +74,7 @@ const Login = () => {
           <input
             type="text"
             placeholder="Username or Email"
-            className="border-b-2 border-teal-600 bg-transparent text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+            className="border-b-2 border-teal-600 bg-transparen text-gray-600  dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
             value={usernameOrEmail}
             onChange={(e) => setUsernameOrEmail(e.target.value)}
           />
@@ -87,7 +88,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
-            className="border-b-2 border-teal-600 bg-transparent text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+            className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -120,6 +121,7 @@ const Login = () => {
           </Link>
         </motion.p>
       </motion.form>
+      <ThemeToggle />
     </div>
   );
 };

@@ -12,7 +12,7 @@ const LeftBar = ({ setActiveSection, activeSection }) => {
   ];
 
   return (
-    <div className="w-16 bg-black flex flex-col justify-between shadow-md">
+    <div className="w-16 dark:bg-black bg-gray-100 flex flex-col justify-between shadow-md">
       <div className="flex-1"></div>
 
       <div className="flex flex-col space-y-4 mb-4 items-center">
@@ -24,7 +24,7 @@ const LeftBar = ({ setActiveSection, activeSection }) => {
             className={`p-3 rounded-lg ${
               activeSection === item.id
                 ? "bg-teal-500 text-white"
-                : "text-gray-400 hover:bg-gray-700"
+                : "text-gray-400 dark:hover:bg-gray-700 hover:bg-gray-200"
             }`}
             title={item.title}
           >

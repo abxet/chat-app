@@ -147,7 +147,6 @@ export const rejectRequest = async (req, res) => {
 
 
 // search users by username
-// GET /api/user/search?username=alice
 export const searchUsers = async (req, res) => {
   try {
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
@@ -165,6 +164,33 @@ export const searchUsers = async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// unfriend a friend
+export const unfriendUser = async (req, res) => {
+  try {
+    const currentUserId = req.user._id; // from auth middleware
+    const { friendId } = req.params;
+
+    if (!friendId) {
+      return res.status(400).json({ error: "Friend ID is required" });
+    }
+
+    // Remove friend from current user
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { friends: friendId },
+    });
+
+    // Remove current user from friend's friend list
+    await User.findByIdAndUpdate(friendId, {
+      $pull: { friends: currentUserId },
+    });
+
+    res.status(200).json({ message: "Friend removed successfully" });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 };
