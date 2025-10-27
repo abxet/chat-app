@@ -1,6 +1,7 @@
 
 // pages/signUp
 import React, { useState, useEffect, useContext } from "react";
+import { generateKeyPair, encryptPrivateKey, decryptPrivateKey } from "../utils/crypto";
 // import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
@@ -9,6 +10,8 @@ import { motion } from "framer-motion";
 import PasswordStrengthBar from "../components/PasswordStrengthBar"; // adjust path if needed
 import ThemeToggle from "../components/ThemeToggle";
 import { UserContext } from "../context/UserContext";
+import { useKeyContext } from "../context/KeyContext";
+
 
 const Signup = () => {
     const [username, setUsername] = useState("");
@@ -22,9 +25,13 @@ const Signup = () => {
     const [containsNumbers, setContainsNumbers] = useState(false);
     const [containsSpecialCharacters, setContainsSpecialCharacters] = useState(false);
     const [moreThan8Characters, setMoreThan8Characters] = useState(false);
-    
+
     const navigate = useNavigate();
+
     const { updateUserData } = useContext(UserContext);
+    const { saveUserData } = useKeyContext();
+    
+
 
     const calculatePasswordStrength = (password) => {
         let strength = 0;
@@ -40,32 +47,32 @@ const Signup = () => {
     };
 
     // Turning off password validation for development purposes
-
-    useEffect(() => {
-        if (password && confirmPassword && password !== confirmPassword) {
-            setError("Passwords do not match");
-        } else if (
-            password &&
-            (password.length < 8 ||
-                !/[A-Z]/.test(password) ||
-                !/[a-z]/.test(password) ||
-                !/[0-9]/.test(password) ||
-                !/\W/.test(password))
-        ) {
-            setError(
-                "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
-            );
-        } else {
-            setError("");
-        }
-        setContainsCapitalLetters(/[A-Z]/.test(password));
-        setContainsLowercaseLetters(/[a-z]/.test(password));
-        setContainsNumbers(/[0-9]/.test(password));
-        setContainsSpecialCharacters(/[\W]/.test(password));
-        setMoreThan8Characters(password.length >= 8);
-        setPasswordStrength(calculatePasswordStrength(password));
-    }, [password, confirmPassword]);
-
+    // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    // useEffect(() => {
+    //     if (password && confirmPassword && password !== confirmPassword) {
+    //         setError("Passwords do not match");
+    //     } else if (
+    //         password &&
+    //         (password.length < 8 ||
+    //             !/[A-Z]/.test(password) ||
+    //             !/[a-z]/.test(password) ||
+    //             !/[0-9]/.test(password) ||
+    //             !/\W/.test(password))
+    //     ) {
+    //         setError(
+    //             "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
+    //         );
+    //     } else {
+    //         setError("");
+    //     }
+    //     setContainsCapitalLetters(/[A-Z]/.test(password));
+    //     setContainsLowercaseLetters(/[a-z]/.test(password));
+    //     setContainsNumbers(/[0-9]/.test(password));
+    //     setContainsSpecialCharacters(/[\W]/.test(password));
+    //     setMoreThan8Characters(password.length >= 8);
+    //     setPasswordStrength(calculatePasswordStrength(password));
+    // }, [password, confirmPassword]);
+    // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     const handleSignup = async (e) => {
         e.preventDefault();
         if (error || !username || !email || !password || password !== confirmPassword) {
@@ -73,7 +80,15 @@ const Signup = () => {
             return;
         }
         try {
-            const response = await api.post("/signup", { username, email, password });
+            // encryption logic
+            // 1) Generate tweetnacl keypair
+            const keypair = generateKeyPair();
+            saveUserData(username, keypair.publicKey, keypair.secretKey);
+
+            // 2) Encrypt secretKey with user's password (client-side)
+            const encryptedPrivateKey = await encryptPrivateKey(keypair.secretKey, password);
+
+            const response = await api.post("/signup", { username, email, password, encryptedPrivateKey, publicKey: keypair.publicKey });
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.user._id);
 
@@ -265,9 +280,9 @@ const Signup = () => {
                         Login
                     </a>
                 </motion.p>
-            
+
             </motion.div>
-            <ThemeToggle/>
+            <ThemeToggle />
         </div>
     );
 };

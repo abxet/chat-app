@@ -8,14 +8,55 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../context/UserContext";
 import ThemeToggle from "../components/ThemeToggle";
+import { generateKeyPair, encryptPrivateKey, decryptPrivateKey } from "../utils/crypto";
+
+import { useKeyContext } from "../context/KeyContext";
+
 
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { user, secretKey, saveUserData } = useKeyContext();
 
   // ✅ Moved inside the component (this fixes the invalid hook call)
   const { updateUserData } = useContext(UserContext);
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!usernameOrEmail.trim() || !password.trim()) {
+  //     toast.error("Please enter both username/email and password.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await api.post("/login", { usernameOrEmail, password });
+
+  //     if (response?.data?.token) {
+  //       localStorage.setItem("token", response.data.token);
+  //       localStorage.setItem("userId", response.data.user._id);
+
+  //       // Update context
+  //       updateUserData(response.data.user || { usernameOrEmail });
+  //       let secretKeyBase64;
+  //       secretKeyBase64 = await decryptPrivateKey(data.encryptedPrivateKey, password);
+  //       saveUserData(username, data.publicKey, secretKeyBase64)
+  //       toast.success("Login successful!");
+  //       navigate("/chat");
+  //     } else {
+  //       toast.error("Unexpected server response. Please try again.");
+  //     }
+  //   } catch (err) {
+  //     if (err.response?.status === 401) {
+  //       toast.error("Incorrect username, email, or password.");
+  //     } else if (err.response?.data?.error) {
+  //       toast.error(err.response.data.error);
+  //     } else {
+  //       toast.error("Unable to connect. Check your internet connection.");
+  //     }
+  //   }
+  // };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,12 +69,17 @@ const Login = () => {
     try {
       const response = await api.post("/login", { usernameOrEmail, password });
 
-      if (response?.data?.token) {
+      const userData = response?.data?.user;
+      if (response?.data?.token && userData) {
         localStorage.setItem("token", response.data.token);
-         localStorage.setItem("userId", response.data.user._id);
+        localStorage.setItem("userId", userData._id);
 
-        // Update context
-        updateUserData(response.data.user || { usernameOrEmail });
+        // Decrypt private key using password
+        const secretKeyBase64 = await decryptPrivateKey(userData.encryptedPrivateKey, password);
+
+        // Save in contexts
+        updateUserData(userData);
+        saveUserData(userData.username, userData.publicKey, secretKeyBase64);
 
         toast.success("Login successful!");
         navigate("/chat");
@@ -41,6 +87,7 @@ const Login = () => {
         toast.error("Unexpected server response. Please try again.");
       }
     } catch (err) {
+      console.error("Login error:", err);
       if (err.response?.status === 401) {
         toast.error("Incorrect username, email, or password.");
       } else if (err.response?.data?.error) {
@@ -50,6 +97,7 @@ const Login = () => {
       }
     }
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen dark:bg-gray-800 relative">

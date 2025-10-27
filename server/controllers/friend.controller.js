@@ -10,7 +10,7 @@ export const getFriends = async (req, res) => {
 
     const user = await User.findById(req.user._id).populate(
       'friends',
-      'username email bio profile'
+      'username email profile publicKey'
     );
 
     if (!user) return res.status(404).json({ error: 'User not found' });
@@ -192,6 +192,28 @@ export const unfriendUser = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+// get public key
+export const getUserPublicKey = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find the user and only return the public key field
+    const user = await User.findById(userId).select("publicKey username");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.json({
+      username: user.username,
+      publicKey: user.publicKey,
+    });
+  } catch (error) {
+    console.error("Error fetching public key:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
