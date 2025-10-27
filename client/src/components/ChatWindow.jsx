@@ -4,14 +4,48 @@ import { Send } from "lucide-react";
 import ChatHeader from "./ChatHeader";
 import ProfileInfo from "./ProfileInfo";
 import api from "../api/axiosInstance.js";
+import { encryptMessage, decryptMessage } from "../utils/crypto";
+import { useKeyContext } from "../context/KeyContext";
+import MessageStatus from "./MessageStatus.jsx";
+
 
 const ChatWindow = ({ socket, selectedFriend }) => {
+  const { user, secretKey, saveUserData } = useKeyContext();
+
+
+
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  const [recipientPublicKey, setRecipientPublicKey] = useState("");
   const [input, setInput] = useState("");
   const [showProfile, setShowProfile] = useState(false);
   const scrollRef = useRef();
 
   const currentUserId = localStorage.getItem("userId");
+  // Mark as seen
+  useEffect(() => {
+  if (!socket || !selectedFriend || !currentUserId) return;
+
+  // Tell backend to mark messages from this friend as seen
+  socket.emit("mark as seen", {
+    senderId: selectedFriend._id,   // friend is the sender
+    receiverId: currentUserId,      // you are the receiver
+  });
+
+
+  socket.on("messages seen", ({ senderId, receiverId }) => {
+  setMessages((prev) =>
+    prev.map((m) =>
+      m.senderId === senderId && m.receiverId === receiverId
+        ? { ...m, status: "seen" }
+        : m
+    )
+  );
+});
+}, [selectedFriend, socket, currentUserId]);
+
+
   // handle unfriend
   const handleUnfriend = async (friendId) => {
     try {
@@ -24,28 +58,46 @@ const ChatWindow = ({ socket, selectedFriend }) => {
     }
   };
 
-  // ✅ Fetch previous messages when friend changes
+  // Fetch previous messages when friend changes OLD MESSAGES
   useEffect(() => {
     if (!selectedFriend || !currentUserId) return;
 
     const fetchMessages = async () => {
       try {
         const res = await api.get(`/messages/${currentUserId}/${selectedFriend._id}`);
-        setMessages(res.data || []);
+        const decryptedMsgs = res.data.map(m => {
+          const isMyMessage = m.senderId === currentUserId;
+
+          const text = isMyMessage
+            ? decryptMessage(m.ciphertext, m.nonce, m.toPublicKey, secretKey)   // you sent it
+            : decryptMessage(m.ciphertext, m.nonce, m.fromPublicKey, secretKey) // you received it
+
+          return {
+            senderId: m.senderId,
+            text: text || "<Failed to decrypt>",
+            createdAt: m.createdAt
+              ? new Date(m.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+              : null,
+          };
+        });
+
+
+        setMessages(decryptedMsgs);
       } catch (err) {
         console.error("Error loading messages:", err);
       }
     };
 
     fetchMessages();
-  }, [selectedFriend, currentUserId]);
+  }, [selectedFriend, secretKey, currentUserId]);
 
   //  Auto-scroll to bottom when messages change
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Join private room & listen for real-time messages
+  // Join private room & listen for real-time messages NEW MESSAGES
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   useEffect(() => {
     if (!socket || !selectedFriend) return;
 
@@ -54,24 +106,74 @@ const ChatWindow = ({ socket, selectedFriend }) => {
         ? `${currentUserId}_${selectedFriend._id}`
         : `${selectedFriend._id}_${currentUserId}`;
 
-    // Join private room
     socket.emit("join_room", roomId);
 
-    // Handle messages from server
     const handleNewMessage = (msg) => {
-      // Only add if the message belongs to this conversation
+      if (!secretKey) {
+        console.warn("Secret key missing — cannot decrypt yet.");
+        return;
+      }
+
+
       if (
         (msg.senderId === currentUserId && msg.receiverId === selectedFriend._id) ||
         (msg.senderId === selectedFriend._id && msg.receiverId === currentUserId)
       ) {
-        setMessages((prev) => [...prev, msg]);
+
+        // CONSOLE LOGS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        console.log("New message received:", msg);
+        console.log("Decrypt lengths (live msg):", {
+          message: msg,
+          ciphertext: msg.ciphertext ? atob(msg.ciphertext).length : 0,
+          nonce: msg.nonce ? atob(msg.nonce).length : 0,
+          senderPublicKey: msg.fromPublicKey ? atob(msg.fromPublicKey).length : 0,
+          recipientSecretKey: secretKey ? atob(secretKey).length : 0,
+        });
+        // END OF CONSOLE LOGS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+        const isMyMessage = msg.senderId === currentUserId;
+
+        const decryptedText = isMyMessage
+          ? decryptMessage(msg.ciphertext, msg.nonce, msg.toPublicKey, secretKey)
+          : decryptMessage(msg.ciphertext, msg.nonce, msg.fromPublicKey, secretKey) || "<Failed to decrypt>";
+
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            senderId: msg.senderId,
+            text: decryptedText,
+            createdAt: msg.createdAt
+              ? msg.createdAt
+              : new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ]);
       }
     };
 
     socket.on("chat message", handleNewMessage);
 
+
     return () => socket.off("chat message", handleNewMessage);
-  }, [socket, selectedFriend, currentUserId]);
+  }, [socket, selectedFriend, currentUserId, secretKey]);
+
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  //  Get recipient's public key
+  useEffect(() => {
+    const fetchRecipientKey = async () => {
+      console.log(selectedFriend.username + " is selected");
+      if (!selectedFriend?._id) return;
+      try {
+        const res = await api.get(`/friends/public-key/${selectedFriend._id}`);
+        console.log(res.data.publicKey);
+        setRecipientPublicKey(res.data.publicKey);
+        console.log(recipientPublicKey);
+      } catch (err) {
+        console.error("Failed to fetch recipient public key:", err);
+      }
+    };
+    fetchRecipientKey();
+  }, [selectedFriend]);
 
   //  Send message
   const sendMessage = async () => {
@@ -81,12 +183,25 @@ const ChatWindow = ({ socket, selectedFriend }) => {
       currentUserId < selectedFriend._id
         ? `${currentUserId}_${selectedFriend._id}`
         : `${selectedFriend._id}_${currentUserId}`;
+    console.log("Recipient Public Key:", recipientPublicKey);
+    console.log("My Secret Key:", secretKey);
+    console.log("Decoded lengths →",
+      recipientPublicKey ? atob(recipientPublicKey).length : 0,
+      secretKey ? atob(secretKey).length : 0
+    );
 
+    // Encrypt message
+    const { ciphertext, nonce } = encryptMessage(input, recipientPublicKey, secretKey);
     const messageData = {
       roomId,
       senderId: currentUserId,
       receiverId: selectedFriend._id,
-      text: input,
+      // text: input,
+      ciphertext,
+      nonce,
+      fromPublicKey: user.publicKey,
+      toPublicKey: recipientPublicKey,
+
     };
 
     try {
@@ -118,7 +233,7 @@ const ChatWindow = ({ socket, selectedFriend }) => {
         onClick={() => setShowProfile(!showProfile)}
       />
 
-      { showProfile ? (
+      {showProfile ? (
         <ProfileInfo
           name={selectedFriend.username}
           bio={selectedFriend.profile?.bio || "No bio available"}
@@ -126,7 +241,7 @@ const ChatWindow = ({ socket, selectedFriend }) => {
         />
       ) : (
         <>
-          {/* Messages */}
+          {/* Messages
 
           <div className="flex-1 p-4 overflow-y-auto flex flex-col space-y-3">
             {messages.map((msg) => {
@@ -140,6 +255,37 @@ const ChatWindow = ({ socket, selectedFriend }) => {
                     }`}
                 >
                   <div>{msg.text}</div>
+                </div>
+              );
+            })}
+            <div ref={scrollRef} />
+          </div> */}
+
+          {/* Messages */}
+          <div className="flex-1 p-4 overflow-y-auto flex flex-col space-y-3">
+            {messages.map((msg) => {
+              // Normalize both IDs to strings and trim
+              const senderId = String(msg.senderId || msg.from || "").trim();
+              const userId = String(currentUserId || "").trim();
+
+              const isCurrentUser = senderId === userId;
+
+              return (
+                <div
+                  key={msg._id || msg.id || Math.random()}
+                  className={`max-w-xs px-4 py-2 rounded-lg break-words ${isCurrentUser
+                    ? "bg-teal-500 text-white self-end rounded-br-none"
+                    : "dark:bg-gray-700 bg-white dark:text-white text-gray-600 self-start rounded-bl-none"
+                    }`}
+                >
+                  <div>{msg.text}</div>
+
+                  <MessageStatus
+                    isCurrentUser={isCurrentUser}
+                    createdAt={msg.createdAt}
+                    status={msg.status || "sent"} // optional
+                  />
+
                 </div>
               );
             })}
