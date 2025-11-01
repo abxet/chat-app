@@ -8,11 +8,9 @@ import { useTheme } from "../context/ThemeContext";
 
 const SettingsPanel = ({ setTheme, onLogout, onEditProfile }) => {
   const { theme, toggleTheme } = useTheme();
-
   const [currentUser, setCurrentUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // ✅ Fetch logged-in user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -25,7 +23,6 @@ const SettingsPanel = ({ setTheme, onLogout, onEditProfile }) => {
     fetchUser();
   }, []);
 
-  // ✅ If editing mode → show EditProfile
   if (isEditing && currentUser) {
     return (
       <EditProfile
@@ -63,8 +60,6 @@ const SettingsPanel = ({ setTheme, onLogout, onEditProfile }) => {
         <div className="space-y-3 w-full max-w-sm">
           {/* ✏️ Edit Profile */}
           <button
-            // onClick={() => setIsEditing(true)}
-            //  onClick={() => onEditProfile(currentUser)}
             onClick={() => onEditProfile && onEditProfile(currentUser)}
 
             className="flex items-center justify-center w-full py-2 bg-teal-500 hover:bg-teal-600 rounded-lg text-white font-semibold space-x-2"
@@ -73,7 +68,7 @@ const SettingsPanel = ({ setTheme, onLogout, onEditProfile }) => {
             <span>Edit Profile</span>
           </button>
 
-          {/* 🌓 Toggle Theme */}
+          {/* Toggle Theme */}
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={toggleTheme}
@@ -88,7 +83,7 @@ const SettingsPanel = ({ setTheme, onLogout, onEditProfile }) => {
             )}
           </motion.button>
 
-          {/* 🚪 Logout */}
+          {/*Logout */}
           <button
             onClick={onLogout}
             className="flex items-center justify-center w-full py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white font-semibold space-x-2"

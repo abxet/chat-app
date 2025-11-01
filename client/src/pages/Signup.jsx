@@ -2,12 +2,11 @@
 // pages/signUp
 import React, { useState, useEffect, useContext } from "react";
 import { generateKeyPair, encryptPrivateKey, decryptPrivateKey } from "../utils/crypto";
-// import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { CircleX, CircleCheck, Lock, KeyRound, User, Mail } from "lucide-react";
 import { motion } from "framer-motion";
-import PasswordStrengthBar from "../components/PasswordStrengthBar"; // adjust path if needed
+import PasswordStrengthBar from "../components/PasswordStrengthBar";
 import ThemeToggle from "../components/ThemeToggle";
 import { UserContext } from "../context/UserContext";
 import { useKeyContext } from "../context/KeyContext";

@@ -56,13 +56,10 @@ export const initSocket = (server) => {
         console.error("🔥 Error saving message:", err);
       }
     });
-
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
     // MARK AS SEEN 
-
-    // ✅ When user opens chat, mark friend’s messages as seen
+    // When user opens chat, mark friend’s messages as seen
     socket.on("mark as seen", async ({ senderId, receiverId }) => {
       try {
         // update unseen messages in DB

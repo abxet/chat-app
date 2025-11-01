@@ -10,7 +10,6 @@ const handleUnfriend = async (friendId) => {
   try {
     const res = await api.post(`/users/unfriend/${friendId}`);
     alert(res.data.message || "Unfriended successfully!");
-    // Optional: refresh friend list or navigate
   } catch (err) {
     console.error(err);
     alert(err.response?.data?.error || "Unable to unfriend");

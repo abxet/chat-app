@@ -29,7 +29,7 @@ const Chat = () => {
     socket.emit("join_room", roomId);
   };
 
-  // ✅ Handle when Edit Profile is clicked in Settings
+  // Handle when Edit Profile is clicked in Settings
   const handleEditProfile = (user) => {
     setCurrentUser(user);
     setEditingProfile(true);
@@ -42,10 +42,10 @@ const Chat = () => {
       <Sidebar
         activeSection={activeSection}
         onSelectContact={handleSelectContact}
-        onEditProfile={handleEditProfile} // ✅ new prop
+        onEditProfile={handleEditProfile}
       />
 
-      {/* ✅ Switch between Chat and Edit Profile */}
+      {/* Switch between Chat and Edit Profile */}
       {editingProfile ? (
         <EditProfile
           currentUser={currentUser}

@@ -20,7 +20,7 @@ export function generateKeyPair() {
 export const encodeBase64 = naclUtil.encodeBase64;
 export const decodeBase64 = naclUtil.decodeBase64;
 
-// ✅ Encrypt message
+// Encrypt message
 export const encryptMessage = (message, recipientPublicKeyBase64, senderSecretKeyBase64) => {
   const recipientPublicKey = decodeBase64(recipientPublicKeyBase64);
   const senderSecretKey = decodeBase64(senderSecretKeyBase64);
@@ -38,7 +38,7 @@ export const encryptMessage = (message, recipientPublicKeyBase64, senderSecretKe
   };
 };
 
-// ✅ Decrypt message
+// Decrypt message
 export const decryptMessage = (ciphertextBase64, nonceBase64, senderPublicKeyBase64, recipientSecretKeyBase64) => {
   try {
     const ciphertext = decodeBase64(ciphertextBase64);
@@ -57,44 +57,11 @@ export const decryptMessage = (ciphertextBase64, nonceBase64, senderPublicKeyBas
 };
 
 
-// export function encryptMessage(message, recipientPublicKey, senderSecretKey) {
-//   const nonce = nacl.randomBytes(24);
-//   const messageUint8 = util.decodeUTF8(message);
-
-//   const box = nacl.box(
-//     messageUint8,
-//     nonce,
-//     util.decodeBase64(recipientPublicKey),
-//     util.decodeBase64(senderSecretKey)
-//   );
-
-//   return {
-//     ciphertext: util.encodeBase64(box),
-//     nonce: util.encodeBase64(nonce),
-//   };
-// }
-
-// export function decryptMessage(ciphertext, nonce, senderPublicKey, recipientSecretKey) {
-//   try {
-//     const decrypted = nacl.box.open(
-//       util.decodeBase64(ciphertext),
-//       util.decodeBase64(nonce),
-//       util.decodeBase64(senderPublicKey),
-//       util.decodeBase64(recipientSecretKey)
-//     );
-
-//     return decrypted ? util.encodeUTF8(decrypted) : null;
-//   } catch (err) {
-//     console.error("🔒 Decryption failed:", err);
-//     return null;
-//   }
-// }
-
 // --------------------- Password-protect long-term private key ---------------------
 // We encrypt the *private key string* with an AES-GCM key derived from password via PBKDF2.
 // The stored blob is a base64-encoded JSON: { ciphertext: [...], iv: [...], salt: [...] }
 
-const PBKDF2_ITERATIONS = 200000; // tune for UX/CPU (200k as an example)
+const PBKDF2_ITERATIONS = 200000; // tune for UX/CPU (200k)
 const SALT_BYTES = 16;
 const IV_BYTES = 12;
 
@@ -137,7 +104,7 @@ export async function encryptPrivateKey(secretKeyBase64, password) {
     ["encrypt", "decrypt"]
   );
 
-  const plaintext = encoder.encode(secretKeyBase64); // store the secretKey string encrypted
+  const plaintext = encoder.encode(secretKeyBase64);
   const ciphertextBuffer = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv, tagLength: 128 },
     aesKey,

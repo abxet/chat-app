@@ -18,11 +18,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { user, secretKey, saveUserData } = useKeyContext();
-
-  // ✅ Moved inside the component (this fixes the invalid hook call)
   const { updateUserData } = useContext(UserContext);
-
-  // const handleLogin = async (e) => {
   //   e.preventDefault();
 
   //   if (!usernameOrEmail.trim() || !password.trim()) {

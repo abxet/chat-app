@@ -1,12 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.model.js';
 
 //sign up function
-
 const signup = async (req, res) => {
   try {
     const { username, email, password, encryptedPrivateKey, publicKey } = req.body;
@@ -63,55 +61,6 @@ const signup = async (req, res) => {
 };
 
 // login function
-
-// const login = async (req, res) => {
-//   try {
-//     const { usernameOrEmail, password } = req.body;
-
-//     if (!usernameOrEmail || !password) {
-//       return res.status(400).json({ error: "All fields are required" });
-//     }
-
-//     // Find user
-//     const user = usernameOrEmail.includes("@")
-//       ? await User.findOne({ email: usernameOrEmail })
-//       : await User.findOne({ username: usernameOrEmail });
-
-//     if (!user) {
-//       return res.status(401).json({ error: "Invalid username or password" });
-//     }
-
-//     // Check password
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ error: "Invalid username or password" });
-//     }
-
-//     // Generate JWT
-//     const token = jwt.sign(
-//       { _id: user._id, username: user.username, email: user.email},
-//       process.env.JWT_SECRET,
-//       { expiresIn: "1h" }
-//     );
-
-//     // ✅ Send structured response
-//     res.status(200).json({
-//       message: "Login successful",
-//       token,
-//       user: {
-//         _id: user._id,
-//         username: user.username,
-//         email: user.email,
-//         encryptedPrivateKey,
-//         publicKey,
-//       },
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "💔 Server error" });
-//   }
-// };
-
 const login = async (req, res) => {
   try {
     const { usernameOrEmail, password } = req.body;
@@ -160,9 +109,7 @@ const login = async (req, res) => {
   }
 };
 
-
 // GET /api/users/me to get the current user's details
-
 export const getCurrentUser = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: "Not authorized" });
@@ -203,8 +150,6 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ error: "💔 Server error" });
   }
 };
-
-
 
 // export the functions
 export { signup, login };

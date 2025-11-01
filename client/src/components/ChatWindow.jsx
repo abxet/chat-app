@@ -8,15 +8,10 @@ import { encryptMessage, decryptMessage } from "../utils/crypto";
 import { useKeyContext } from "../context/KeyContext";
 import MessageStatus from "./MessageStatus.jsx";
 
-
 const ChatWindow = ({ socket, selectedFriend }) => {
   const { user, secretKey, saveUserData } = useKeyContext();
-
-
-
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-
   const [recipientPublicKey, setRecipientPublicKey] = useState("");
   const [input, setInput] = useState("");
   const [showProfile, setShowProfile] = useState(false);
@@ -44,7 +39,6 @@ const ChatWindow = ({ socket, selectedFriend }) => {
   );
 });
 }, [selectedFriend, socket, currentUserId]);
-
 
   // handle unfriend
   const handleUnfriend = async (friendId) => {
@@ -120,16 +114,6 @@ const ChatWindow = ({ socket, selectedFriend }) => {
         (msg.senderId === selectedFriend._id && msg.receiverId === currentUserId)
       ) {
 
-        // CONSOLE LOGS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-        console.log("New message received:", msg);
-        console.log("Decrypt lengths (live msg):", {
-          message: msg,
-          ciphertext: msg.ciphertext ? atob(msg.ciphertext).length : 0,
-          nonce: msg.nonce ? atob(msg.nonce).length : 0,
-          senderPublicKey: msg.fromPublicKey ? atob(msg.fromPublicKey).length : 0,
-          recipientSecretKey: secretKey ? atob(secretKey).length : 0,
-        });
-        // END OF CONSOLE LOGS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         const isMyMessage = msg.senderId === currentUserId;
 
         const decryptedText = isMyMessage
@@ -205,13 +189,9 @@ const ChatWindow = ({ socket, selectedFriend }) => {
     };
 
     try {
-      // Save message in DB
-      // await api.post("/messages", messageData);
-
       // Emit to server for real-time delivery
       socket.emit("chat message", messageData);
-      // console.log("Message sent:", messageData);
-      // Clear input
+
       setInput("");
     } catch (err) {
       console.error("Error sending message:", err);
@@ -241,26 +221,7 @@ const ChatWindow = ({ socket, selectedFriend }) => {
         />
       ) : (
         <>
-          {/* Messages
-
-          <div className="flex-1 p-4 overflow-y-auto flex flex-col space-y-3">
-            {messages.map((msg) => {
-              const isCurrentUser = msg.senderId === currentUserId;
-              return (
-                <div
-                  key={msg._id || msg.id}
-                  className={`max-w-xs px-4 py-2 rounded-lg break-words ${isCurrentUser
-                    ? "bg-teal-500 text-white self-end rounded-br-none" // user's message → bottom-right corner sharp
-                    : "dark:bg-gray-700 bg-white dark:text-white text-gray-600 self-start rounded-bl-none" // friend's message → bottom-left corner sharp
-                    }`}
-                >
-                  <div>{msg.text}</div>
-                </div>
-              );
-            })}
-            <div ref={scrollRef} />
-          </div> */}
-
+          
           {/* Messages */}
           <div className="flex-1 p-4 overflow-y-auto flex flex-col space-y-3">
             {messages.map((msg) => {

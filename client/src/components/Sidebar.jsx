@@ -20,7 +20,7 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
   const [theme, setTheme] = useState("dark");
   const [currentUser, setCurrentUser] = useState(null);
 
-  // ✅ Fetch current user
+  // Fetch current user
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {

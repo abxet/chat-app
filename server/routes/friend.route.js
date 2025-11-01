@@ -15,9 +15,7 @@ const router = Router();
 
 router.get("/search", authMiddleware, searchUsers);
 router.get("/", authMiddleware, getFriends);
-
 router.get("/public-key/:userId", authMiddleware, getUserPublicKey);
-
 router.get("/requests", authMiddleware, getRequests);
 router.post("/requests", authMiddleware, postRequest);
 router.put("/requests/:id/accept", authMiddleware, acceptRequest);

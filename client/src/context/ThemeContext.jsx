@@ -7,7 +7,7 @@ export const ThemeProvider = ({ children }) => {
     return localStorage.getItem("theme") || "light";
   });
 
-  // Apply theme to <html> element
+  // Apply theme 
   useEffect(() => {
     const root = window.document.documentElement;
     if (theme === "dark") {

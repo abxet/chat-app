@@ -51,7 +51,6 @@ const EditProfile = ({ currentUser, onClose }) => {
 
   return (
     <div className="flex-1 justify-center flex-col items-center h-full p-4 bg-gray-300 dark:bg-gray-800">
-      {/* <div className="flex justify-center items-center h-full p-4 bg-gray-800"> */}
       <ToastContainer position="top-right" autoClose={3000} />
         <motion.h2
           initial={{ opacity: 0, y: -20 }}

@@ -6,7 +6,7 @@ export const KeyProvider = ({ children }) => {
   const [user, setUser] = useState(null); // { username, publicKey }
   const [secretKey, setSecretKey] = useState(null);
 
-  // ✅ Load from localStorage on app start
+  // Load from localStorage on app start
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedSecretKey = localStorage.getItem("secretKey");
@@ -15,7 +15,7 @@ export const KeyProvider = ({ children }) => {
     if (savedSecretKey) setSecretKey(savedSecretKey);
   }, []);
 
-  // ✅ Save to localStorage whenever we call saveUserData
+  // Save to localStorage whenever we call saveUserData
   const saveUserData = (username, publicKey, secretKeyValue) => {
     const userData = { username, publicKey };
     setUser(userData);

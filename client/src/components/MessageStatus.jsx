@@ -1,14 +1,6 @@
 import React from "react";
 import { Check, CheckCheck } from "lucide-react";
 
-/**
- * MessageStatus Component
- * 
- * Props:
- * - isCurrentUser: boolean (to match styling)
- * - createdAt: ISO string or formatted string
- * - status: "sent" | "delivered" | "seen" (optional)
- */
 const MessageStatus = ({ isCurrentUser, createdAt, status }) => {
   if (!createdAt) return null;
 

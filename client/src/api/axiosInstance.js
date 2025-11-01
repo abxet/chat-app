@@ -5,7 +5,7 @@ import axios from "axios";
 // Create an axios instance
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api", 
-  withCredentials: true, // allows sending cookies (optional, useful if JWT is cookie-based)
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
