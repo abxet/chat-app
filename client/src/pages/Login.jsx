@@ -96,20 +96,23 @@ const Login = () => {
 
 
   return (
-    <div className="flex justify-center items-center h-screen dark:bg-gray-800 relative">
+    <div className="flex justify-center items-center h-screen relative w-screen bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('src/assets/teal.jpg')" }}
+
+    >
       <ToastContainer position="top-right" autoClose={3000} />
       <motion.form
         onSubmit={handleLogin}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col w-full max-w-sm p-8 dark:bg-gray-900 rounded-lg shadow-lg"
+        className="flex flex-col w-full max-w-sm p-8 backdrop-blur-3xl dark:bg-gray-800/85 rounded-lg shadow-lg"
       >
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-6 text-3xl font-bold text-center text-teal-500"
+          className="mb-6 text-3xl font-bold text-center dark:text-teal-500 text-white"
         >
           Welcome Back!
         </motion.h2>
@@ -118,13 +121,13 @@ const Login = () => {
           <input
             type="text"
             placeholder="Username or Email"
-            className="border-b-2 border-teal-600 bg-transparen text-gray-600  dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+            className="border-b-2 border-teal-600 bg-transparen dark:text-white text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-300"
             value={usernameOrEmail}
             onChange={(e) => setUsernameOrEmail(e.target.value)}
           />
           <User
             size={18}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-500 pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none"
           />
         </div>
 
@@ -132,13 +135,13 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
-            className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+            className="border-b-2 border-teal-600 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-300"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <KeyRound
             size={18}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-500 pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none"
           />
         </div>
 

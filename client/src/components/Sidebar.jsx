@@ -1,5 +1,3 @@
-
-
 // components/SideBar
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useContext } from "react";
@@ -120,7 +118,7 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
   );
 
   return (
-    <div className=" w-64 dark:bg-gray-900 bg-gray-200 border-r border-gray-800 p-4 overflow-y-auto">
+    <div className=" w-64 dark:bg-gray-900/85 bg-gray-200/0 border-r border-gray-800/10 p-4 overflow-y-auto backdrop-blur-lg">
       <AnimatePresence mode="wait">
         {/* 👥 FRIENDS LIST */}
         {activeSection === "contacts" && (
@@ -159,7 +157,7 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
             <FriendRequestList
               requests={friendRequests}
               onAccept={handleAccept}
-              onReject={handleReject} // <-- pass the reject handler
+              onReject={handleReject} 
             />
           </motion.div>
         )}

@@ -6,7 +6,6 @@ import ChatWindow from "../components/ChatWindow";
 import EditProfile from "../components/EditProfile";
 import { io } from "socket.io-client";
 
-
 const socket = io("http://localhost:5000", {
   transports: ["websocket", "polling"],
 });
@@ -27,6 +26,12 @@ const Chat = () => {
         : `${friend._id}_${currentUserId}`;
 
     socket.emit("join_room", roomId);
+
+    socket.emit("mark as seen", {
+      senderId: friend._id,
+      receiverId: currentUserId,
+    });
+
   };
 
   // Handle when Edit Profile is clicked in Settings
@@ -36,7 +41,9 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex h-screen dark:bg-gray-800 bg-gray-500">
+    <div className="flex h-screen dark:bg-gray-800 bg-gray-500 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('src/assets/teal.jpg')" }}
+    >
       <LeftBar setActiveSection={setActiveSection} activeSection={activeSection} />
 
       <Sidebar

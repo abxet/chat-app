@@ -1,4 +1,3 @@
-
 import { Server } from "socket.io";
 import Message from "../models/Message.model.js";
 
@@ -22,18 +21,17 @@ export const initSocket = (server) => {
     });
 
     // Listen for messages
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    socket.on("chat message", async ({ roomId, senderId, receiverId, ciphertext, nonce, fromPublicKey, toPublicKey }) => {
+    socket.on("chat message", async ({ roomId, senderId, receiverId, ciphertext, nonce, fromPublicKey, toPublicKey, status, tempId, }) => {
       try {
-        console.log("🤖 Message Received:", { roomId, senderId, receiverId, ciphertext, nonce, fromPublicKey, toPublicKey });
-
+        console.log("🤖 Message Received:", { roomId, senderId, receiverId, ciphertext, nonce, fromPublicKey, toPublicKey, status });
         const message = await Message.create({
           senderId,
           receiverId,
           ciphertext,
           nonce,
           fromPublicKey,
-          toPublicKey
+          toPublicKey,
+          status: "sent",
         });
 
         const msgData = {
@@ -48,18 +46,37 @@ export const initSocket = (server) => {
             hour: "2-digit",
             minute: "2-digit",
           }),
+          status: "sent",
         };
-
-        // io.to(roomId).emit("chat message", message);
+        socket.emit("message_sent", tempId);
         io.to(roomId).emit("chat message", msgData);
       } catch (err) {
         console.error("🔥 Error saving message:", err);
       }
     });
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    socket.on("mark as delivered", async ({ senderId, receiverId }) => {
+      try {
+        // update unseen messages in DB
+        await Message.updateMany(
+          { senderId, receiverId, status: { $ne: "delivered" } },
+          { $set: { status: "delivered" } }
+        );
+
+        // inform both users
+        const roomId =
+          senderId < receiverId
+            ? `${senderId}_${receiverId}`
+            : `${receiverId}_${senderId}`;
+
+        io.to(roomId).emit("delivered", { senderId, receiverId });
+        console.log(`✅ Messages delivered: ${senderId} → ${receiverId}`);
+      } catch (err) {
+        console.error("🔥 Error marking as delivered:", err);
+      }
+    });
 
     // MARK AS SEEN 
-    // When user opens chat, mark friend’s messages as seen
     socket.on("mark as seen", async ({ senderId, receiverId }) => {
       try {
         // update unseen messages in DB
@@ -74,7 +91,7 @@ export const initSocket = (server) => {
             ? `${senderId}_${receiverId}`
             : `${receiverId}_${senderId}`;
 
-        io.to(roomId).emit("messages seen", { senderId, receiverId });
+        io.to(roomId).emit("seen", { senderId, receiverId });
         console.log(`✅ Messages seen: ${senderId} → ${receiverId}`);
       } catch (err) {
         console.error("🔥 Error marking as seen:", err);

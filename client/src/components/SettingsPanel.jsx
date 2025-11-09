@@ -41,7 +41,7 @@ const SettingsPanel = ({ setTheme, onLogout, onEditProfile }) => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
-        className="flex flex-col items-center justify-start p-6 dark:bg-gray-900 h-full dark:text-white text-gray-500 space-y-6"
+        className="flex flex-col items-center justify-start p-6 dark:bg-gray-900/0 h-full dark:text-white text-gray-500 space-y-6 bg-white/0"
       >
         {/* settings */}
         <div className="space-y-3 w-full max-w-sm">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, CheckCheck } from "lucide-react";
+import { Circle, CircleCheck, Clock, CircleAlert } from "lucide-react";
 
 const MessageStatus = ({ isCurrentUser, createdAt, status }) => {
   if (!createdAt) return null;
@@ -12,12 +12,16 @@ const MessageStatus = ({ isCurrentUser, createdAt, status }) => {
   // choose tick icon based on status
   const getStatusIcon = () => {
     switch (status) {
+      case "sending":
+       return <Clock size={12} className="text-gray-200 ml-1" />;
       case "sent":
-        return <Check size={12} className="text-gray-200 ml-1" />;
+        return <Circle size={12} className="text-gray-200 ml-1" />;
       case "delivered":
-        return <CheckCheck size={12} className="text-gray-200 ml-1" />;
+        return <CircleCheck size={12} className="text-gray-200 ml-1" />;
       case "seen":
-        return <CheckCheck size={12} className="text-blue-700 ml-1" />;
+        return <CircleCheck size={12} className="text-blue-700 ml-1" />;
+      case "error":
+        return <CircleAlert size={12} className="text-red-400 ml-1" />;
       default:
         return null;
     }

@@ -11,8 +11,7 @@ const messageSchema = new mongoose.Schema({
   nonce: { type: String, required: true },
   fromPublicKey: { type: String, required: true },
   toPublicKey: { type: String, required: true },
-  //
-  
+  status : {type: String, required : true, enum : ["sent","delivered","seen","sending","error"], default:"sending"},
 },
   { timestamps: true } 
 );

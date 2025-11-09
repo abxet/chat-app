@@ -21,7 +21,7 @@ const ProfileInfo = ({ name, bio, onUnfriend, onEditProfile }) => {
   const initial = name ? name.charAt(0).toUpperCase() : "?";
 
   return (
-    <div className="flex flex-col items-center justify-start p-6 bg-gray-900 h-full text-white space-y-6">
+    <div className="flex flex-col items-center justify-start p-6 dark:bg-gray-900/50 h-full text-white space-y-6 backdrop-blur-lg">
       {/* Profile Circle */}
       <div className="w-24 h-24 rounded-full bg-teal-500 flex items-center justify-center text-white text-4xl font-bold">
         {initial}

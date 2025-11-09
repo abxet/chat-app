@@ -6,7 +6,7 @@ const ChatHeader = ({ contactName, onClick }) => {
 
   return (
     <div
-      className="flex items-center p-4 bg-gray-200 dark:bg-gray-900 border-b border-gray-700 cursor-pointer"
+      className="flex items-center p-4 bg-gray-200/50 dark:bg-gray-900/40 border-b border-gray-700/20 cursor-pointer backdrop-blur-lg"
       onClick={onClick}
     >
       {/* Profile circle */}

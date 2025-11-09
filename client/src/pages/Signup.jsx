@@ -47,30 +47,30 @@ const Signup = () => {
 
     // Turning off password validation for development purposes
     // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    // useEffect(() => {
-    //     if (password && confirmPassword && password !== confirmPassword) {
-    //         setError("Passwords do not match");
-    //     } else if (
-    //         password &&
-    //         (password.length < 8 ||
-    //             !/[A-Z]/.test(password) ||
-    //             !/[a-z]/.test(password) ||
-    //             !/[0-9]/.test(password) ||
-    //             !/\W/.test(password))
-    //     ) {
-    //         setError(
-    //             "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
-    //         );
-    //     } else {
-    //         setError("");
-    //     }
-    //     setContainsCapitalLetters(/[A-Z]/.test(password));
-    //     setContainsLowercaseLetters(/[a-z]/.test(password));
-    //     setContainsNumbers(/[0-9]/.test(password));
-    //     setContainsSpecialCharacters(/[\W]/.test(password));
-    //     setMoreThan8Characters(password.length >= 8);
-    //     setPasswordStrength(calculatePasswordStrength(password));
-    // }, [password, confirmPassword]);
+    useEffect(() => {
+        if (password && confirmPassword && password !== confirmPassword) {
+            setError("Passwords do not match");
+        } else if (
+            password &&
+            (password.length < 8 ||
+                !/[A-Z]/.test(password) ||
+                !/[a-z]/.test(password) ||
+                !/[0-9]/.test(password) ||
+                !/\W/.test(password))
+        ) {
+            setError(
+                "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character"
+            );
+        } else {
+            setError("");
+        }
+        setContainsCapitalLetters(/[A-Z]/.test(password));
+        setContainsLowercaseLetters(/[a-z]/.test(password));
+        setContainsNumbers(/[0-9]/.test(password));
+        setContainsSpecialCharacters(/[\W]/.test(password));
+        setMoreThan8Characters(password.length >= 8);
+        setPasswordStrength(calculatePasswordStrength(password));
+    }, [password, confirmPassword]);
     // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -102,18 +102,21 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen dark:bg-gray-800">
+        <div className="flex justify-center items-center w-screen h-screen dark:bg-gray-800 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('src/assets/teal.jpg')" }}
+        >
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="flex flex-col w-full max-w-sm p-8 dark:bg-gray-900 rounded-lg shadow-lg"
+                className="flex flex-col w-full max-w-sm p-8 dark:bg-gray-900/85 rounded-lg shadow-lg backdrop-blur-3xl dark:backdrop-blur-2xl"
+                
             >
                 <motion.h2
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="mb-6 text-3xl font-bold text-center text-teal-500"
+                    className="mb-6 text-3xl font-bold text-center dark:text-teal-500 text-white"
                 >
                     Create Account
                 </motion.h2>
@@ -127,13 +130,13 @@ const Signup = () => {
                     <input
                         type="text"
                         placeholder="Username"
-                        className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 dark:border-teal-600 border-teal-100 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none dark:focus:border-teal-400 focus:border-white dark:placeholder-gray-400 placeholder-gray-100"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <User
                         size={18}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-500 pointer-events-none"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 dark:text-teal-500 text-teal-100 pointer-events-none"
                     />
                 </motion.div>
 
@@ -146,13 +149,13 @@ const Signup = () => {
                     <input
                         type="email"
                         placeholder="Email"
-                        className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="dark:focus:border-teal-400 border-b-2 dark:border-teal-600 border-teal-100 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-white dark:placeholder-gray-400 placeholder-gray-100"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <Mail
                         size={18}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-500 pointer-events-none"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 dark:text-teal-500 text-teal-100 pointer-events-none"
                     />
                 </motion.div>
 
@@ -165,17 +168,17 @@ const Signup = () => {
                     <input
                         type="password"
                         placeholder="Password"
-                        className="border-b-2 border-teal-600 bg-transparent  text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 dark:border-teal-600 border-teal-100 bg-transparent  text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-white dark:focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-100"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <KeyRound
                         size={18}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-500 pointer-events-none"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 dark:text-teal-500 text-teal-100 pointer-events-none"
                     />
                 </motion.div>
 
-                <div className="text-xs text-gray-400 mb-2">
+                <div className="text-xs text-gray-200 mb-2">
                     Password strength: {passwordStrength}
                 </div>
                 <PasswordStrengthBar strength={passwordStrength} />
@@ -211,7 +214,7 @@ const Signup = () => {
                     ].map((item, i) => (
                         <motion.li
                             key={i}
-                            className={`flex items-center gap-2 ${item.condition ? "text-green-500" : "text-red-500"}`}
+                            className={`flex items-center gap-2 ${item.condition ? "text-green-500" : "text-rose-800 dark:text-red-500"}`}
                             animate={{ opacity: item.condition ? 1 : 0.6 }}
                         >
                             {item.condition ? <CircleCheck size={16} /> : <CircleX size={16} />}
@@ -229,7 +232,7 @@ const Signup = () => {
                     <input
                         type="password"
                         placeholder="Confirm Password"
-                        className="border-b-2 border-teal-600 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 placeholder-gray-400"
+                        className="border-b-2 border-teal-600 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-100"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />

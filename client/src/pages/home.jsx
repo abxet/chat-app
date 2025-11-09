@@ -13,9 +13,9 @@ const Home = () => {
       {/* NAVBAR */}
       <nav className="flex justify-between items-center px-8 py-5 bg-white/70 dark:bg-gray-900/50 backdrop-blur-md shadow-sm dark:shadow-none">
         <div className="flex items-center gap-3">
-          <img src={logo} alt="Zealo Logo" className="w-10 h-10" />
+          <img src={logo} alt="Teal Chat Logo" className="w-10 h-10" />
           <h1 className="text-2xl font-bold tracking-tight text-teal-500">
-            Zealo
+            Teal
           </h1>
         </div>
 
@@ -44,7 +44,7 @@ const Home = () => {
         className="flex flex-col items-center justify-center flex-1 text-center px-8 py-24 sm:py-32"
       >
         <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 text-gray-900 dark:text-white dark:drop-shadow-[0_0_12px_#00bfa5]">
-          Chat Reimagined with <span className="text-teal-400">Zealo</span>
+          Chat Reimagined with <span className="text-teal-400">Teal</span>
         </h1>
         <p className="max-w-2xl text-lg sm:text-xl mb-12 text-gray-600 dark:text-gray-300">
           Experience real-time conversations secured with next-gen encryption.
@@ -75,7 +75,7 @@ const Home = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl sm:text-4xl font-bold text-center mb-16"
         >
-          Why Choose <span className="text-teal-400">Zealo?</span>
+          Why Choose <span className="text-teal-400">Teal Chat?</span>
         </motion.h2>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
@@ -90,11 +90,11 @@ const Home = () => {
             },
             {
               title: "Modern UI/UX",
-              desc: "Minimal, elegant, and fast — Zealo is built with beauty and speed in mind.",
+              desc: "Minimal, elegant, and fast — Teal Chat is built with beauty and speed in mind.",
             },
             {
               title: "Custom Themes",
-              desc: "Light or Dark, Zealo adapts to your style with seamless transitions.",
+              desc: "Light or Dark, Teal Chat adapts to your style with seamless transitions.",
             },
             {
               title: "Secure Storage",
@@ -126,7 +126,7 @@ const Home = () => {
       {/* SCREENSHOT SECTION */}
       <section className="py-24 text-center bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
         <h2 className="text-3xl font-bold mb-10">
-          See <span className="text-teal-400">Zealo</span> in Action
+          See <span className="text-teal-400">Teal Chat</span> in Action
         </h2>
         <div className="w-4/5 max-w-4xl mx-auto h-80 sm:h-[28rem] rounded-2xl flex items-center justify-center border-2 border-gray-300 dark:border-teal-400/50 dark:shadow-[0_0_15px_#00bfa5]/40 transition-all duration-300 overflow-x-hidden">
           <p className="text-gray-500 dark:text-gray-400">
@@ -139,8 +139,8 @@ const Home = () => {
       <footer className="py-10 px-8 sm:px-16 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="Zealo Logo" className="w-8 h-8" />
-            <h3 className="text-lg font-semibold text-teal-500">Zealo</h3>
+            <img src={logo} alt="Teal Chat Logo" className="w-8 h-8" />
+            <h3 className="text-lg font-semibold text-teal-500">Teal Chat</h3>
           </div>
 
           <div className="flex gap-6">
@@ -153,7 +153,7 @@ const Home = () => {
               <Github size={22} />
             </a>
             <a
-              href="mailto:support@zealo.app"
+              href="mailto:support@tealchat.app"
               className="hover:text-teal-500 dark:hover:text-teal-400 transition-colors"
             >
               <Mail size={22} />
@@ -167,7 +167,7 @@ const Home = () => {
           </div>
 
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Made with 💚 by <span className="text-teal-500">Zealo Team</span>
+            Made with 💚 by <span className="text-teal-500">Teal Team</span>
           </p>
         </div>
       </footer>
