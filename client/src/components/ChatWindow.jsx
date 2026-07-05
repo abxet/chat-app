@@ -226,7 +226,7 @@ const ChatWindow = ({ socket, selectedFriend }) => {
   if (!selectedFriend) {
     return (
       <div className="flex-1 flex items-center justify-center text-gray-400 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('src/assets/vector.png')" }}
+        // style={{ backgroundImage: "url('src/assets/vector.png')" }}
       >
         Select a friend to start chatting
       </div>

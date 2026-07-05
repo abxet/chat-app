@@ -19,40 +19,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { user, secretKey, saveUserData } = useKeyContext();
   const { updateUserData } = useContext(UserContext);
-  //   e.preventDefault();
-
-  //   if (!usernameOrEmail.trim() || !password.trim()) {
-  //     toast.error("Please enter both username/email and password.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await api.post("/login", { usernameOrEmail, password });
-
-  //     if (response?.data?.token) {
-  //       localStorage.setItem("token", response.data.token);
-  //       localStorage.setItem("userId", response.data.user._id);
-
-  //       // Update context
-  //       updateUserData(response.data.user || { usernameOrEmail });
-  //       let secretKeyBase64;
-  //       secretKeyBase64 = await decryptPrivateKey(data.encryptedPrivateKey, password);
-  //       saveUserData(username, data.publicKey, secretKeyBase64)
-  //       toast.success("Login successful!");
-  //       navigate("/chat");
-  //     } else {
-  //       toast.error("Unexpected server response. Please try again.");
-  //     }
-  //   } catch (err) {
-  //     if (err.response?.status === 401) {
-  //       toast.error("Incorrect username, email, or password.");
-  //     } else if (err.response?.data?.error) {
-  //       toast.error(err.response.data.error);
-  //     } else {
-  //       toast.error("Unable to connect. Check your internet connection.");
-  //     }
-  //   }
-  // };
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -112,7 +79,7 @@ const Login = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mb-6 text-3xl font-bold text-center dark:text-teal-500 text-white"
+          className="mb-6 text-3xl font-bold text-center dark:text-teal-500 text-teal-500"
         >
           Welcome Back!
         </motion.h2>
@@ -121,13 +88,13 @@ const Login = () => {
           <input
             type="text"
             placeholder="Username or Email"
-            className="border-b-2 border-teal-600 bg-transparen dark:text-white text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-300"
+            className="border-b-2 border-teal-600 bg-transparen dark:text-white text-gray-600 w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-300"
             value={usernameOrEmail}
             onChange={(e) => setUsernameOrEmail(e.target.value)}
           />
           <User
             size={18}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none"
           />
         </div>
 
@@ -135,13 +102,13 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
-            className="border-b-2 border-teal-600 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-300"
+            className="border-b-2 border-teal-600 bg-transparent text-gray-600 dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-300"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <KeyRound
             size={18}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none"
           />
         </div>
 

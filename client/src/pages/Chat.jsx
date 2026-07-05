@@ -41,7 +41,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex h-screen dark:bg-gray-800 bg-gray-500 bg-cover bg-center bg-no-repeat"
+    <div className="flex h-screen dark:bg-gray-800 bg-gray-200 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('src/assets/teal.jpg')" }}
     >
       <LeftBar setActiveSection={setActiveSection} activeSection={activeSection} />

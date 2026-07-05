@@ -116,7 +116,7 @@ const Signup = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="mb-6 text-3xl font-bold text-center dark:text-teal-500 text-white"
+                    className="mb-6 text-3xl font-bold text-center dark:text-teal-500 text-teal-500"
                 >
                     Create Account
                 </motion.h2>
@@ -130,13 +130,13 @@ const Signup = () => {
                     <input
                         type="text"
                         placeholder="Username"
-                        className="border-b-2 dark:border-teal-600 border-teal-100 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none dark:focus:border-teal-400 focus:border-white dark:placeholder-gray-400 placeholder-gray-100"
+                        className="border-b-2 dark:border-teal-600 border-teal-300 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none dark:focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-400"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <User
                         size={18}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 dark:text-teal-500 text-teal-100 pointer-events-none"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 dark:text-teal-500 text-teal-300 pointer-events-none"
                     />
                 </motion.div>
 
@@ -149,7 +149,7 @@ const Signup = () => {
                     <input
                         type="email"
                         placeholder="Email"
-                        className="dark:focus:border-teal-400 border-b-2 dark:border-teal-600 border-teal-100 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-white dark:placeholder-gray-400 placeholder-gray-100"
+                        className="border-b-2 dark:border-teal-600 border-teal-300 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none dark:focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-400"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -168,7 +168,7 @@ const Signup = () => {
                     <input
                         type="password"
                         placeholder="Password"
-                        className="border-b-2 dark:border-teal-600 border-teal-100 bg-transparent  text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-white dark:focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-100"
+                        className="border-b-2 dark:border-teal-600 border-teal-300 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none dark:focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-400"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -232,7 +232,7 @@ const Signup = () => {
                     <input
                         type="password"
                         placeholder="Confirm Password"
-                        className="border-b-2 border-teal-600 bg-transparent text-white dark:text-white w-full pr-10 p-3 outline-none focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-100"
+                        className="border-b-2 dark:border-teal-600 border-teal-300 bg-transparent text-gray-500 dark:text-white w-full pr-10 p-3 outline-none dark:focus:border-teal-400 dark:placeholder-gray-400 placeholder-gray-400"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
