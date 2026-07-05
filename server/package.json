@@ -1,14 +1,15 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "server for chat app",
+  "description": "Server for chat app",
   "main": "server.js",
   "type": "module",
-  "scripts": {
-    "start": "nodemon server.js"
-  },
   "author": "Abhijeet",
   "license": "ISC",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
@@ -20,5 +21,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
