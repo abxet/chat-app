@@ -10,6 +10,7 @@ import SearchBar from "./SearchBar";
 import SettingsPanel from "./SettingsPanel";
 import FriendRequestList from "./FriendRequestList";
 import UserSearchPanel from "./UserSearchPanel";
+import api from "../api/axiosInstance";
 
 const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
   const [friends, setFriends] = useState([]);
@@ -23,9 +24,7 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
     const fetchCurrentUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/me");
         setCurrentUser(res.data); 
       } catch (error) {
         console.error("❌ Failed to load current user:", error);
@@ -40,9 +39,7 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
     const fetchFriends = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/friends", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/friends");
         setFriends(res.data);
       } catch (error) {
         console.error("❌ Failed to load friends:", error);
@@ -56,9 +53,7 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
     const fetchRequests = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/friends/requests", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get("/friends/requests");
         setFriendRequests(res.data);
       } catch (error) {
         console.error("❌ Failed to load friend requests:", error);
@@ -71,11 +66,9 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
   const handleAccept = async (requestUser) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/friends/requests/${requestUser._id}/accept`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(
+  `/friends/requests/${requestUser._id}/accept`
+);
 
       // Update local UI
       setFriendRequests(friendRequests.filter((r) => r._id !== requestUser._id));
@@ -89,11 +82,9 @@ const Sidebar = ({ activeSection, onSelectContact, onEditProfile  }) => {
   const handleReject = async (requestUser) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/friends/requests/${requestUser._id}/reject`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(
+  `/friends/requests/${requestUser._id}/reject`
+);
 
       // Remove request from UI
       setFriendRequests(friendRequests.filter((r) => r._id !== requestUser._id));

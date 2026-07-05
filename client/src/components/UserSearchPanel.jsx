@@ -1,8 +1,6 @@
-
-// components/UserSearchPanel
 import { useState } from "react";
-import axios from "axios";
 import { UserPlus, Search } from "lucide-react";
+import api from "../api/axiosInstance"; // Adjust the path if needed
 
 const UserSearchPanel = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,14 +11,12 @@ const UserSearchPanel = () => {
     if (!searchTerm.trim()) return;
 
     setLoading(true);
+
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5000/api/friends/search?username=${searchTerm}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const res = await api.get(
+        `/friends/search?username=${encodeURIComponent(searchTerm)}`
       );
+
       setResults(res.data);
     } catch (error) {
       console.error("Error searching users:", error);
@@ -31,14 +27,10 @@ const UserSearchPanel = () => {
 
   const sendFriendRequest = async (friendId) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "http://localhost:5000/api/friends/requests",
-        { friendId },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.post("/friends/requests", {
+        friendId,
+      });
+
       alert("Friend request sent!");
     } catch (error) {
       console.error("Error sending friend request:", error);
@@ -55,14 +47,19 @@ const UserSearchPanel = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full pl-3 pr-3 py-2 dark:bg-gray-900 dark:text-white text-gray-600 placeholder-gray-400 border-b-2 border-teal-600 focus:outline-none focus:border-teal-400"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
         />
+
         <button
           onClick={handleSearch}
-          className="bg-teal-500 text-white px-3 py-2 rounded  flex items-center gap-2"
+          className="bg-teal-500 text-white px-3 py-2 rounded flex items-center gap-2"
         >
           <Search size={18} className="text-white" />
         </button>
-
       </div>
 
       {loading && <p className="text-gray-400">Searching...</p>}
@@ -78,12 +75,13 @@ const UserSearchPanel = () => {
                 <p className="font-semibold">{user.username}</p>
                 <p className="text-gray-400 text-sm">{user.email}</p>
               </div>
+
               <button
                 onClick={() => sendFriendRequest(user._id)}
                 className="bg-green-600 p-2 rounded hover:bg-green-500"
                 title="Send Friend Request"
               >
-                <UserPlus size={18} className="text-white"/>
+                <UserPlus size={18} className="text-white" />
               </button>
             </div>
           ))}
